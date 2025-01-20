@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:background="@android:color/white"
+  >
+
+    <!-- Foto del contacto -->
+    <ImageView
+        android:id="@+id/imgContacto"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_ontacto" />
+
+    <!-- Nombre y Tipo del contacto -->
+    <TextView
+        android:id="@+id/txtNombreVer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Nombre del Contacto"
+        android:textSize="14sp"
+        android:textColor="#000000" />
+
+    <!-- Teléfono del contacto -->
+    <TextView
+        android:id="@+id/tvTelefonoContacto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tel: 123-456-7890"
+        android:textSize="12sp"
+        android:textColor="#888888" />
+
+    <!-- Botón para llamar -->
+    <Button
+        android:id="@+id/btnLlamar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Llamar"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#8C115A" />
+</LinearLayout>
