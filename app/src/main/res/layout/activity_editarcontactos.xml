@@ -82,19 +82,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Anterior"
-            android:layout_margin="8dp" />
-        <Button
-            android:id="@+id/btnGuardarCambios"
-            android:layout_width="wrap_content"
-            android:backgroundTint="#8C115A"
-            android:layout_height="wrap_content"
-            android:text="Guardar Cambios" />
-        <Button
-            android:id="@+id/btnSiguiente"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Siguiente"
-            android:layout_margin="8dp" />
+            android:layout_margin="10dp" />
+
+            <Button
+                android:id="@+id/btnGuardarCambios"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#8C115A"
+                android:text="Guardar"
+                android:layout_margin="10dp" />
+
+            <Button
+                android:id="@+id/btnSiguiente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Siguiente" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
