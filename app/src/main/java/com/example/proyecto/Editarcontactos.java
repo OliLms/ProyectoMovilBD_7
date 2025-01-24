@@ -12,9 +12,19 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 import POJO.contactos;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Editarcontactos extends AppCompatActivity {
     private EditText etNameEdit, etPhoneEdit, etAddressEdit, etEmailEdit, etAgeEdit, etDescriptionEdit;
@@ -98,18 +108,71 @@ public class Editarcontactos extends AppCompatActivity {
     }
 
     private void guardarCambios() {
-        contactos contactoEditado = listaContactos.get(currentIndex);
-        contactoEditado.setNombre(etNameEdit.getText().toString());
-        contactoEditado.setTelefono(etPhoneEdit.getText().toString());
-        contactoEditado.setDireccion(etAddressEdit.getText().toString());
-        contactoEditado.setCorreo(etEmailEdit.getText().toString());
-        contactoEditado.setEdad(Integer.parseInt(etAgeEdit.getText().toString()));
-        contactoEditado.setGenero(spinnerGenderEdit.getSelectedItem().toString());
-        contactoEditado.setTipo(spinnerTypeEdit.getSelectedItem().toString());
-        contactoEditado.setDescripcion(etDescriptionEdit.getText().toString());
+        // Obtener los datos editados
+        String nombre = etNameEdit.getText().toString();
+        String telefono = etPhoneEdit.getText().toString();
+        String direccion = etAddressEdit.getText().toString();
+        String correo = etEmailEdit.getText().toString();
+        int edad = Integer.parseInt(etAgeEdit.getText().toString());
+        String genero = spinnerGenderEdit.getSelectedItem().toString();
+        String tipo = spinnerTypeEdit.getSelectedItem().toString();
+        String descripcion = etDescriptionEdit.getText().toString();
 
-        Toast.makeText(Editarcontactos.this, "Cambios guardados", Toast.LENGTH_SHORT).show();
+        // Crear el objeto JSON con los datos del contacto
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("nombre", nombre);
+            jsonObject.put("telefono", telefono);
+            jsonObject.put("direccion", direccion);
+            jsonObject.put("correo", correo);
+            jsonObject.put("edad", edad);
+            jsonObject.put("genero", genero);
+            jsonObject.put("tipo", tipo);
+            jsonObject.put("descripcion", descripcion);
+
+            // Crear el cuerpo de la solicitud HTTP
+            RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.get("application/json"));
+
+            // Crear la solicitud HTTP
+            Request request = new Request.Builder()
+                    .url("https://10.0.2.2/editar.php")  // Cambia la URL a la de tu servidor
+                    .post(body)
+                    .build();
+
+            // Realizar la solicitud en un hilo en segundo plano
+            OkHttpClient client = new OkHttpClient();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    runOnUiThread(() -> Toast.makeText(Editarcontactos.this, "Error al actualizar el contacto", Toast.LENGTH_SHORT).show());
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(Editarcontactos.this, "Contacto actualizado exitosamente", Toast.LENGTH_SHORT).show();
+                            // Actualizar el contacto en la lista local
+                            contactos contactoEditado = listaContactos.get(currentIndex);
+                            contactoEditado.setNombre(nombre);
+                            contactoEditado.setTelefono(telefono);
+                            contactoEditado.setDireccion(direccion);
+                            contactoEditado.setCorreo(correo);
+                            contactoEditado.setEdad(edad);
+                            contactoEditado.setGenero(genero);
+                            contactoEditado.setTipo(tipo);
+                            contactoEditado.setDescripcion(descripcion);
+                        });
+                    } else {
+                        runOnUiThread(() -> Toast.makeText(Editarcontactos.this, "Error al actualizar el contacto en la base de datos", Toast.LENGTH_SHORT).show());
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
     private void mostrarContactoAnterior() {
         if (currentIndex > 0) {
             currentIndex--;
